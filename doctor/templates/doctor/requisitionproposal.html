@@ -1,0 +1,66 @@
+{% extends 'doctor/base.html' %}
+{% load static %}
+
+{% block content-block %}
+    <body class="body">
+        {% include 'doctor/header.html' %}
+        <div class="div-1">
+
+                        {% include 'doctor/nav.html' %}
+
+        </div>
+        <div class="main-content">
+
+        <h1 style="text-align: center;"><u>Requisition Proposals</u> </h1>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Staff</th>
+                    <th>Medicine</th>
+                    <th>Requisition ID</th>
+                    <th>Quantity</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
+                    {% if isCommittee %}
+                    <th class="text-center">Add to Requisition List</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for i in data  %}
+                    <tr>
+                        <td>{{ i.doctor_id }} </td>
+                        <td>{{ i.medicine_id }}  </td>
+                        <td>{{ i.requisition_id }}</td>
+                        <td>{{ i.quantity }}</td>
+                        {% if i.doctor_id.user_id_id == user_id %}
+                            <td class="text-center"><a href="{% url 'edit-requisitionproposal-view' i.pk i.doctor_id.user_id_id %}">Edit</a></td>
+                            <td class="text-center"><a href="{% url 'delete-requisitionproposal-view' i.pk i.doctor_id.user_id_id %}">Delete</a></td>
+                        {% else %}
+                            <td class="text-center"> Edit </td>
+                            <td class="text-center"> Delete </td>
+                        {% endif %}
+                        {% if isCommittee %}
+                            <td class="text-center">
+                                <form method="post" action="{% url 'confirm-addition-into-requisition' %}">
+                                    {% csrf_token %}
+                                    <input type="text" name="id" value="{{ i.pk }}" hidden>
+                                    <input type="text" name="med-id" value="{{ i.medicine_id_id }}" hidden>
+                                    <input type="text" name="req-id" value="{{ i.requisition_id }}" hidden>
+                                    <input type="number" name="qty" value="{{ i.quantity }}" hidden>
+                                    <input class="btn btn-secondary" type="submit" value="Add">
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        <a href="{% url 'add-requisitionproposal-view' %}" class="btn btn-custom">Add Requisition Proposal</a>
+        <a href="{% url 'doctor-home-view' %}" class="btn btn-custom">Home</a>
+        </div>
+        {% include 'doctor/footer.html' %}
+    </body>
+{% endblock content-block %}

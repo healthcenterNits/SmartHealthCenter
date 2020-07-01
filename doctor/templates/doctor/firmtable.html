@@ -1,0 +1,75 @@
+{% extends 'doctor/base.html' %}
+{% load static %}
+{% load extra_tag %}
+
+{% block content-block %}
+<body class="body">
+    {% include 'doctor/header.html' %}
+    <div class="div-1">
+                   
+            {% include 'doctor/nav.html' %}
+
+    </div>
+    <div class="main-content">
+    <h1 style="text-align: center;"><u>Empanelled Firms</u> </h1>
+    {% if request.user|inGroup:'pharmacist' or request.user|inGroup:'admin' %}
+        <a href="{% url 'add-firm-view' %}" class="btn btn-custom">Add New Firm</a>
+    {% endif %}
+    <form action="#">
+        <input type="text" name='s1'/>
+        <input type="submit" value="search"/>
+    </form>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>DIL Number</th>
+                <th>GST Number</th>
+                <th>Phone</th>
+                {% if request.user|inGroup:'pharmacist' or request.user|inGroup:'admin' %}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for i in data  %}
+            <tr>
+                <td>{{ i.firm_name }}</td>
+                <td>{{ i.firm_dilno }}</td>
+                <td>{{ i.firm_gstno }}</td>
+                <td>{{ i.firm_phone }}</td>
+                {% if request.user|inGroup:'pharmacist' or request.user|inGroup:'admin' %}
+                    <td> <a href="{% url 'edit-firm-view' i.id %}">Edit</a></td>
+                    <td> <a href="{% url 'delete-firm-view' i.id %}">Delete</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if data.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ data.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ data.number }} of {{ data.paginator.num_pages }}.
+            </span>
+
+            {% if data.has_next %}
+                <a href="?page={{ data.next_page_number }}">next</a>
+                <a href="?page={{ data.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    <a href="{% url 'doctor-home-view' %}" class="btn btn-custom">Home</a>
+    </div>
+    {% include 'doctor/footer.html' %}
+</body>
+{% endblock content-block %}

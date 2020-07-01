@@ -1,0 +1,46 @@
+{% extends 'doctor/base.html' %}
+{% load static %}
+
+{% block content-block %}
+    <body class="body">
+        {% include 'doctor/header.html' %}
+        <div class="div-1">
+            {% include 'doctor/nav.html' %}
+        </div>
+        <div class="main-content">
+
+        <a class="btn btn-custom" href="{% url 'add-newpatient-view' %}">Add New Patient</a>
+
+
+        <div class="div2">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Height</th>
+                        <th>Weight</th>
+                        <th>Dependent Status</th>
+                        <th>Date of Registration</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data  %}
+                        <tr>
+                            <td>{{ i.patient_id }}</td>
+                            <td>{{ i.height }} cm</td>
+                            <td>{{ i.weight }} kg</td>
+                            <td>{{ i.isDependant }}</td>
+                            <td>{{ i.date_created }}</td>
+                            <td> <a href="{% url 'display-individualrecord-view' i.id %}">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+        {%  include 'doctor/footer.html' %}
+    </body>
+
+
+{% endblock %}

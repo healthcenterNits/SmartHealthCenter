@@ -1,0 +1,76 @@
+{% extends 'doctor/base.html' %}id
+{% load static %}
+{% block content-block %}
+    <body>
+        {% include 'doctor/header.html' %}
+        <div>{% include 'doctor/nav.html' %}</div>
+        <div class="main-content">
+            {% if data%}
+                <h1>Edit Firm</h1>
+            {% else %}
+                <h1>Add Firm</h1>
+            {% endif %}
+            <form method="post" action="{% url 'insert-into-firm-view' %}" class="form-custom">
+                {% csrf_token %}
+                <div class="form-group">
+                    {% comment %} <label for="firm-id">Firm ID</label> {% endcomment %}
+                    {% if data %}
+                     <input id="firm-id" class="form-control" name="firm-id" value={{ data.id }} maxlength=20 type="text" required hidden>
+                    {% else %}
+                     <input id="firm-id" class="form-control" name="firm-id" value=0 maxlength=20 type="text" required hidden>
+                    {% endif %}
+
+                </div>
+
+                <div class="form-group">
+                    <label for="firm-name">Firm Name</label>
+                    {% if data %}
+                     <input id="firm-name" class="form-control" name="firm-name" type="text" required value = "{{ data.name }}">
+                    {% else %}
+                    <input id="firm-name" class="form-control" name="firm-name" type="text" required>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="firm-dilno">Firm DIL Number</label>
+                    {% if data %}
+                    <input id="firm-dilno" class="form-control" name="firm-dilno" type="text" value = {{ data.dil_no }}>
+                    {% else %}
+                    <input id="firm-dilno" class="form-control" name="firm-dilno" type="text">
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="firm-gstno">Firm GST Number</label>
+                    {% if data %}
+                    <input id="firm-gstno" class="form-control" name="firm-gstno" type="text" value = {{ data.gst_no }}>
+                    {% else %}
+                    <input id="firm-gstno" class="form-control" name="firm-gstno" type="text">
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="firm-phone">Firm Phone Number</label>
+                    {% if data %}
+                    <input id="firm-phone" class="form-control" name="firm-phone" type="text" value = {{ data.phone}}>
+                    {% else %}
+                    <input id="firm-phone" class="form-control" name="firm-phone" type="text">
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {% if data %}
+                    <input hidden name="edit_or_add" type="text" value=0>
+                    {% else %}
+                    <input hidden name="edit_or_add" type="text" value=1>
+                    {% endif %}
+                    <input class="btn btn-success" name="submit" type="submit" value="Submit">
+                </div>
+
+            </form>
+
+        </div>
+        {% include 'doctor/footer.html' %}
+    </body>
+
+{% endblock %}

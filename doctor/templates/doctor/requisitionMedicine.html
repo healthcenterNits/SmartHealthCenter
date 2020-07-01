@@ -1,0 +1,54 @@
+{% extends 'doctor/base.html' %}
+{% load static %}
+
+{% block content-block %}
+    <body class="body">
+        {% include 'doctor/header.html' %}
+        <div class="div-1">
+                        {% include 'doctor/nav.html' %}
+        </div>
+        <div class="main-content">
+            <h1 style="text-align: center;"><u>Medicines in Requisition List - <span style="color:green;font-weight: bold">{{ req }}</span></u> </h1>
+            <form method="post" action="{% url 'close-req' %}">
+                {% csrf_token %}
+                <input type="text" name="req-id-for-closing" value="{{ req }}" hidden>
+                {% if isClosed %}
+                    <p class="alert alert-danger">Requisition List Closed</p>
+                    <input class="btn btn-success" name="submit" type="submit" value="Reopen">
+                {% else %}
+                    <input class="btn btn-success" name="submit" type="submit" value="Close">
+                {% endif %}
+            </form>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+<!--                    <th>Requisition ID</th>-->
+                    <th>Medicine ID</th>
+                    <th>Requested Quantity</th>
+                    <th>Received Quantity</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for i in data  %}
+                    <tr>
+<!--                        <td>{{ i.req_id }}</td>-->
+                        <td>{{ i.med_id }}</td>
+                        <td>{{ i.qty_requested }}</td>
+                        <td>{{ i.qty_received }}</td>
+                        <td> <a href="{% url 'edit-requisitionmedicine-view' i.pkey %}">Edit</a></td>
+                        <td> <a href="{% url 'delete-requisitionmedicine-view' i.pkey %}">Delete</a></td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+        <a class="btn btn-custom" href="{% url 'add-requisitionmedicine-view' %}">Add Requisition Medicine</a>
+        <a href="{% url 'doctor-home-view' %}" class="btn btn-secondary">Home</a>
+        </div>
+        {% include 'doctor/footer.html' %}
+    </body>
+{% endblock content-block %}
+    
